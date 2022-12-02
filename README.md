@@ -17,3 +17,6 @@ Substituting the desired day (01-25) for 'XX' below:
 * In a terminal run: `irb -r ./day_XX/day_XX.rb`
 * In the resulting irb session run: `DayXX.new.solution`
 
+## Testing
+If the desired day has specs then substituting the desired day (01-25) for 'XX' below:
+* In a terminal run: ruby ./day_XX/day_XX_spec.rb

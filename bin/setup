@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+require "fileutils"
+
+def system!(*args)
+  system(*args) || abort("\n== Command #{args} failed ==")
+end
+
+PROJECT_ROOT = File.expand_path('..', __dir__)
+
+FileUtils.chdir PROJECT_ROOT do
+  puts '== Installing dependencies =='
+  system! 'gem install bundler --conservative'
+  system('bundle check') || system!('bundle install')
+end

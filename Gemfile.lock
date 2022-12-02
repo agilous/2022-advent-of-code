@@ -1,0 +1,16 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    benchmark (0.2.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  benchmark
+
+RUBY VERSION
+   ruby 3.1.2p20
+
+BUNDLED WITH
+   2.3.22

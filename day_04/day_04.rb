@@ -9,18 +9,18 @@ class Day04
   end
 
   def fully_contained?(line)
-    bounds = line.split(',').map { |a| a.split('-') }
+    bounds = line.split(',').map { |a| a.split('-').map(&:to_i) }
 
     first_contains_second?(bounds) || second_contains_first?(bounds)
   end
 
   def overlapping?(line)
-    bounds = line.split(',').map { |a| a.split('-') }
+    bounds = line.split(',').map { |a| a.split('-').map(&:to_i) }
 
-    bounds[0][0].to_i.between?(bounds[1][0].to_i, bounds[1][1].to_i) ||
-      bounds[0][1].to_i.between?(bounds[1][0].to_i, bounds[1][1].to_i) ||
-      bounds[1][0].to_i.between?(bounds[0][0].to_i, bounds[0][1].to_i) ||
-      bounds[1][1].to_i.between?(bounds[0][0].to_i, bounds[0][1].to_i)
+    bounds[0][0].between?(bounds[1][0], bounds[1][1]) ||
+      bounds[0][1].between?(bounds[1][0], bounds[1][1]) ||
+      bounds[1][0].between?(bounds[0][0], bounds[0][1]) ||
+      bounds[1][1].between?(bounds[0][0], bounds[0][1])
   end
 
   def solution
@@ -35,10 +35,10 @@ class Day04
   private
 
   def first_contains_second?(bounds)
-    (bounds[0][0].to_i <= bounds[1][0].to_i) && (bounds[1][1].to_i <= bounds[0][1].to_i)
+    (bounds[0][0] <= bounds[1][0]) && (bounds[1][1] <= bounds[0][1])
   end
 
   def second_contains_first?(bounds)
-    (bounds[1][0].to_i <= bounds[0][0].to_i) && (bounds[0][1].to_i <= bounds[1][1].to_i)
+    (bounds[1][0] <= bounds[0][0]) && (bounds[0][1] <= bounds[1][1])
   end
 end

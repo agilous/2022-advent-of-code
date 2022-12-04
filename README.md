@@ -10,6 +10,7 @@ other Ruby based submissions. Also, I'm beginning to investigate
 day01  0.000837   0.000038   0.000875 (  0.001062)
 day02  0.005289   0.000170   0.005459 (  0.005628)
 day03  0.001741   0.000049   0.001790 (  0.001946)
+day04  0.008749   0.000155   0.008904 (  0.008929)
 ```
 
 ## Requirements

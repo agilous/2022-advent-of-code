@@ -17,10 +17,7 @@ class Day04
   def overlapping?(line)
     bounds = line.split(',').map { |a| a.split('-').map(&:to_i) }
 
-    bounds[0][0].between?(bounds[1][0], bounds[1][1]) ||
-      bounds[0][1].between?(bounds[1][0], bounds[1][1]) ||
-      bounds[1][0].between?(bounds[0][0], bounds[0][1]) ||
-      bounds[1][1].between?(bounds[0][0], bounds[0][1])
+    first_overlaps_second?(bounds) || second_overlaps_first?(bounds)
   end
 
   def solution
@@ -38,7 +35,17 @@ class Day04
     (bounds[0][0] <= bounds[1][0]) && (bounds[1][1] <= bounds[0][1])
   end
 
+  def first_overlaps_second?(bounds)
+    bounds[0][0].between?(bounds[1][0], bounds[1][1]) ||
+      bounds[0][1].between?(bounds[1][0], bounds[1][1])
+  end
+
   def second_contains_first?(bounds)
     (bounds[1][0] <= bounds[0][0]) && (bounds[0][1] <= bounds[1][1])
+  end
+
+  def second_overlaps_first?(bounds)
+    bounds[1][0].between?(bounds[0][0], bounds[0][1]) ||
+      bounds[1][1].between?(bounds[0][0], bounds[0][1])
   end
 end

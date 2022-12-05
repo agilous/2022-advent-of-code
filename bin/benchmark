@@ -9,7 +9,7 @@ Benchmark.bm do |bm|
   bm.report('day02') { Day02.new.solution }
   bm.report('day03') { Day03.new.solution }
   bm.report('day04') { Day04.new.solution }
-  # bm.report('day05') { Day05.new.solution }
+  bm.report('day05') { Day05.new.solution }
   # bm.report('day06') { Day06.new.solution }
   # bm.report('day07') { Day07.new.solution }
   # bm.report('day08') { Day08.new.solution }

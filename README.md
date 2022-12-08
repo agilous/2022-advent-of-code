@@ -13,6 +13,7 @@ day03  0.001741   0.000049   0.001790 (  0.001946)
 day04  0.008749   0.000155   0.008904 (  0.008929)
 day05  0.002622   0.000000   0.002622 (  0.002613)
 day06  0.004572   0.000067   0.004639 (  0.004829)
+day07  0.193970   0.001291   0.195261 (  0.195449)
 ```
 
 ## Requirements
@@ -44,8 +45,7 @@ In a terminal run:
 ```
 
 ## Testing
-If the desired day has specs then substituting the desired day (01-25) for 'XX'
-below, in a terminal run:
+In a terminal run:
 ```shell
-ruby ./day_XX/day_XX_spec.rb
+./bin/test
 ```

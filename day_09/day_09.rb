@@ -10,94 +10,114 @@ class Day09
 
   def initialize(test: false)
     @test = test
-    @head = { x: 0, y: 0 }
-    @tail = { x: 0, y: 0 }
-    @visits = [@tail]
-
-    problem_input.each { |move| process_move(move) }
+    @knots = 2
+    @points = @knots.times.map { { x: 0, y: 0 } }
+    @visits = [{ x: 0, y: 0 }]
   end
 
-  def adjacent?
-    (same_row? && (@head[:y] - @tail[:y]).abs < 2) ||
-      (same_column? && (@head[:x] - @tail[:x]).abs < 2) || diagonally_adjacent?
+  def adjacent?(head, tail)
+    (same_row?(head, tail) && (head[:y] - tail[:y]).abs < 2) ||
+      (same_column?(head, tail) && (head[:x] - tail[:x]).abs < 2) || diagonally_adjacent?(head, tail)
   end
 
-  def diagonally_adjacent?
-    return true if !(same_column? || same_row?) &&
-                   ((@head[:y] - @tail[:y]).abs < 2) &&
-                   ((@head[:x] - @tail[:x]).abs < 2)
+  def close?(head, tail)
+    overlapping?(head, tail) || adjacent?(head, tail)
+  end
+
+  def diagonally_adjacent?(head, tail)
+    return true if !(same_column?(head, tail) || same_row?(head, tail)) &&
+                   ((head[:y] - tail[:y]).abs < 2) &&
+                   ((head[:x] - tail[:x]).abs < 2)
 
     false
   end
 
-  def move(pos, direction)
+  def move(point, direction)
     case direction
     when 'D'
-      { x: pos[:x], y: pos[:y] - 1 }
+      { x: point[:x], y: point[:y] - 1 }
     when 'L'
-      { x: pos[:x] - 1, y: pos[:y] }
+      { x: point[:x] - 1, y: point[:y] }
     when 'R'
-      { x: pos[:x] + 1, y: pos[:y] }
+      { x: point[:x] + 1, y: point[:y] }
     when 'U'
-      { x: pos[:x], y: pos[:y] + 1 }
+      { x: point[:x], y: point[:y] + 1 }
     end
   end
 
-  def move_tail(direction)
-    return if tail_is_close?
+  def move_tail(head, tail, direction)
+    return if close?(head, tail)
 
-    @tail = (same_row? || same_column? ? move(@tail, direction) : move_tail_diagonal(direction))
-    @visits << @tail
+    same_row?(head, tail) || same_column?(head, tail) ? move(tail, direction) : move_tail_diagonal(head, direction)
   end
 
-  def move_tail_diagonal(direction)
+  def move_tail_diagonal(head, direction)
     case direction
     when 'D'
-      { x: @head[:x], y: @head[:y] + 1 }
+      { x: head[:x], y: head[:y] + 1 }
     when 'L'
-      { x: @head[:x] + 1, y: @head[:y] }
+      { x: head[:x] + 1, y: head[:y] }
     when 'R'
-      { x: @head[:x] - 1, y: @head[:y] }
+      { x: head[:x] - 1, y: head[:y] }
     when 'U'
-      { x: @head[:x], y: @head[:y] - 1 }
+      { x: head[:x], y: head[:y] - 1 }
     end
   end
 
-  def overlapping?
-    @head == @tail
+  def overlapping?(head, tail)
+    head == tail
   end
 
-  def process_move(move)
-    direction, steps = move.split
+  def process_move_at(pointer)
+    (@knots - 1).times do
+      direction, steps = problem_input[pointer].split
+      head = pointer % (@knots - 1)
+      tail = head + 1
 
-    steps.to_i.times { take_step(direction) }
+      puts "Head: #{head}, Tail: #{tail}"
+
+      steps.to_i.times do
+        puts "Moving (#{head}, #{tail}) #{direction}"
+        # @points[head] = move(@points[head], direction)
+        # @points[tail] = move_tail(@points[head], @points[tail], direction)
+      end
+
+      # @visits << @points[tail] if pointer % (@knots - 1)
+    end
   end
 
-  def same_column?
-    @head[:y] == @tail[:y]
+  def same_column?(head, tail)
+    head[:y] == tail[:y]
   end
 
-  def same_row?
-    @head[:x] == @tail[:x]
+  def same_row?(head, tail)
+    head[:x] == tail[:x]
   end
 
   def solution
-    "Part 1: #{@visits.uniq.count}, Part 2: #{'Bar'}"
-  end
+    problem_input.length.times { |pointer| process_move_at(pointer) }
+    part1 = @visits.uniq.count
 
-  def tail_is_close?
-    overlapping? || adjacent?
-  end
-
-  def take_step(direction)
-    @head = move(@head, direction)
-    move_tail(direction)
+    reset_for_part_two
+    problem_input.length.times { |pointer| process_move_at(pointer) }
+    "Part 1: #{part1}, Part 2: #{@visits.uniq.count}"
   end
 
   private
 
   def problem_input
-    if @test
+    if @test && @part2
+      [
+        'R 5',
+        'U 8',
+        'L 8',
+        'D 3',
+        'R 17',
+        'D 10',
+        'L 25',
+        'U 20'
+      ]
+    elsif @test
       [
         'R 4',
         'U 4',
@@ -112,5 +132,12 @@ class Day09
       input_file = "#{File.expand_path('.', __dir__)}/input.txt"
       File.readlines(input_file, chomp: true)
     end
+  end
+
+  def reset_for_part_two
+    @part2 = true
+    @knots = 10
+    @points = @knots.times.map { { x: 0, y: 0 } }
+    @visits = [{ x: 0, y: 0 }]
   end
 end

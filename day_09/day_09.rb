@@ -26,8 +26,7 @@ class Day09
 
   def diagonally_adjacent?(head, tail)
     return true if !(same_column?(head, tail) || same_row?(head, tail)) &&
-                   ((head[:y] - tail[:y]).abs < 2) &&
-                   ((head[:x] - tail[:x]).abs < 2)
+                   ((head[:x].abs - tail[:x].abs) == (head[:y].abs - tail[:y].abs))
 
     false
   end
@@ -45,12 +44,19 @@ class Day09
     end
   end
 
-  def move_tail(head, tail, direction)
+  def move_head(direction)
+    @points[0] = move(@points[0], direction)
+  end
+
+  def move_tail(head_pointer, direction)
+    head = @points[head_pointer]
+    tail = @points[head_pointer + 1]
     return if close?(head, tail)
 
     same_row?(head, tail) || same_column?(head, tail) ? move(tail, direction) : move_tail_diagonal(head, direction)
   end
 
+  # TODO: Figure out how the tail will need to move diagonally.
   def move_tail_diagonal(head, direction)
     case direction
     when 'D'
@@ -68,21 +74,14 @@ class Day09
     head == tail
   end
 
-  def process_move_at(pointer)
-    (@knots - 1).times do
-      direction, steps = problem_input[pointer].split
-      head = pointer % (@knots - 1)
-      tail = head + 1
-
-      puts "Head: #{head}, Tail: #{tail}"
-
-      steps.to_i.times do
-        puts "Moving (#{head}, #{tail}) #{direction}"
-        # @points[head] = move(@points[head], direction)
-        # @points[tail] = move_tail(@points[head], @points[tail], direction)
+  def process_move(move)
+    direction, steps = move.split
+    steps.to_i.times do
+      move_head(direction)
+      (1...@knots).each do |tail|
+        @points[tail] = move_tail(tail, direction)
+        @visits << @points.last if tail == (@knots - 1)
       end
-
-      # @visits << @points[tail] if pointer % (@knots - 1)
     end
   end
 
@@ -95,11 +94,11 @@ class Day09
   end
 
   def solution
-    problem_input.length.times { |pointer| process_move_at(pointer) }
+    problem_input.each { |move| process_move(move) }
     part1 = @visits.uniq.count
 
     reset_for_part_two
-    problem_input.length.times { |pointer| process_move_at(pointer) }
+    problem_input.each { |move| process_move(move) }
     "Part 1: #{part1}, Part 2: #{@visits.uniq.count}"
   end
 

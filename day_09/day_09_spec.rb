@@ -33,7 +33,7 @@ describe Day09 do
         head = { x: 0, y: 0 }
         tail = { x: 1, y: 0 }
 
-          assert @day09.adjacent?(head, tail)
+        assert @day09.adjacent?(head, tail)
       end
     end
 
@@ -86,39 +86,47 @@ describe Day09 do
   describe '#diagonally_adjacent?' do
     # For ease of logic, up, down, left & right are assigned like graph
     # coordinates with { x: 0, y: 0 } being the origin.
-    describe 'when head is one above and left of tail' do
+    describe 'when head is one or more above and left of tail' do
       it 'returns true' do
-        head = { x: -1, y: 1 }
-        tail = { x: 0, y: 0 }
+        (1..5).each do |i|
+          head = { x: (i * -1), y: i }
+          tail = { x: 0, y: 0 }
 
-        assert @day09.diagonally_adjacent?(head, tail)
+          assert @day09.diagonally_adjacent?(head, tail)
+        end
       end
     end
 
-    describe 'when head is one above and right of tail' do
+    describe 'when head is one or more above and right of tail' do
       it 'returns true' do
-        head = { x: 1, y: 1 }
-        tail = { x: 0, y: 0 }
+        (1..5).each do |i|
+          head = { x: i, y: i }
+          tail = { x: 0, y: 0 }
 
-        assert @day09.diagonally_adjacent?(head, tail)
+          assert @day09.diagonally_adjacent?(head, tail)
+        end
       end
     end
 
-    describe 'when head is one below and left of tail' do
+    describe 'when head is one or more below and left of tail' do
       it 'returns true' do
-        head = { x: -1, y: -1 }
-        tail = { x: 0, y: 0 }
+        (1..5).each do |i|
+          head = { x: (i * -1), y: (i * -1) }
+          tail = { x: 0, y: 0 }
 
-        assert @day09.diagonally_adjacent?(head, tail)
+          assert @day09.diagonally_adjacent?(head, tail)
+        end
       end
     end
 
-    describe 'when head is one below and right of tail' do
+    describe 'when head is one or more below and right of tail' do
       it 'returns true' do
-        head = { x: 1, y: -1 }
-        tail = { x: 0, y: 0 }
+        (1..5).each do |i|
+          head = { x: i, y: (i * -1) }
+          tail = { x: 0, y: 0 }
 
-        assert @day09.diagonally_adjacent?(head, tail)
+          assert @day09.diagonally_adjacent?(head, tail)
+        end
       end
     end
 
